@@ -1,0 +1,35 @@
+name: Daily Ghostwriter Run
+
+on:
+  schedule:
+    # Runs at 03:30 UTC every day (which is 09:00 AM IST)
+    - cron: '30 3 * * *'
+  workflow_dispatch: # Adds a manual "Run Now" button for testing
+
+jobs:
+  run-content-engine:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Download your code from the repo
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Install Python 3.12 (Matching your local setup)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # 3. Install the libraries from requirements.txt
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      # 4. Run the Script (Injecting the Secrets)
+      - name: Run Ghostwriter Script
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
+        run: python ghostwriter_v2.py
