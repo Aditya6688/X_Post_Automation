@@ -129,8 +129,7 @@ def generate_tweet(content, source_type):
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
-        ],
-        temperature=0.7
+        ]
     )
     return response.choices[0].message.content
 
@@ -177,4 +176,5 @@ def run_ghostwriter_v2():
             print(f"Error saving to Notion: {e}")
 
 if __name__ == "__main__":
+
     run_ghostwriter_v2()
