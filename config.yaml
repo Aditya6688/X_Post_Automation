@@ -1,0 +1,73 @@
+# ===========================================
+# Ghostwriter Configuration
+# ===========================================
+# All tuneable knobs live here. The script reads this
+# file at startup so you never have to touch Python
+# code to change behaviour.
+
+# --- OpenAI Settings ---
+openai:
+  model: "gpt-5-nano-2025-08-07"
+
+# --- Tweet Generation Rules ---
+tweet:
+  max_length: 200
+  tone: "casual"
+  rules:
+    - "Casual tone (lowercase ok)."
+    - "NO hashtags."
+    - "NO emojis (unless it's a code snippet)."
+
+# --- Content Sources & Weights ---
+# Weights control how often each source is picked.
+# They don't need to sum to 1 — they are relative.
+sources:
+  github_trending:
+    enabled: true
+    weight: 0.4
+    url: "https://github.com/trending/python?since=daily"
+    max_items: 3
+
+  hacker_news:
+    enabled: true
+    weight: 0.3
+    url: "https://news.ycombinator.com/rss"
+    max_items: 3
+
+  arxiv_ai:
+    enabled: true
+    weight: 0.2
+    url: "http://export.arxiv.org/api/query?search_query=cat:cs.AI&start=0&max_results=3&sortBy=submittedDate&sortOrder=descending"
+    max_items: 3
+
+  dev_to:
+    enabled: true
+    weight: 0.1
+    url: "https://dev.to/api/articles?tag=python&top=2"
+    max_items: 3
+
+# --- Persona Profiles ---
+# Each source type maps to a persona that shapes the
+# AI's voice when drafting the tweet.
+personas:
+  Code:
+    role: "You are a pragmatic Senior Engineer looking at a new open-source tool. You value utility over hype."
+    instruction: "Explain briefly what this repo does and why a developer should star it. Ask if it's better than existing tools."
+
+  Research:
+    role: "You are an AI Researcher breaking down complex papers. You make hard concepts simple."
+    instruction: "Summarize the core innovation of this paper in one sentence. Ask 'Will this actually work in production?'"
+
+  Tutorial:
+    role: "You are a helpful mentor. You love sharing learning resources."
+    instruction: "Tell people why this tutorial is worth their time. Mention a specific thing they will learn."
+
+  News:
+    role: "You are a tech commentator with a cynical wit. You cut through the noise."
+    instruction: "Give a hot take on this news. Is it good or bad for the industry?"
+
+# --- Logging ---
+logging:
+  level: "INFO"            # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "json"           # "json" for structured, "text" for human-readable
+  file: null               # Set a path (e.g. "ghostwriter.log") to also log to file
